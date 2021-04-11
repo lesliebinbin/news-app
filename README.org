@@ -1,0 +1,10 @@
+* Brief Structure Introduction
+- The *ApplicationController* include a module called *ElasticSearchService*
+  which is under the app/services folder
+- The *ElasticSearchService* delegates the *search* method to an internal
+  elasticsearch client and provides a method *es_dsl*, the *es_dsl* method
+  accept a block to build elaticsearch body via ruby dsl
+- For the front end home page, there are two components, the char result and a
+  basic form to modify the query params and request, the form and the initial
+  requests use default value to request the result, and these default values can
+  be found under app/javascript/default_data
