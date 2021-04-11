@@ -6,12 +6,19 @@ class ResultsController < ApplicationController
         size 0
         source 'aggregations'
         query do
-          query_string do
-            query 'scott morrison'
-          end
-          range :timestamp do
-            gte 1_551_358_800_000
-            # lte 1_554_037_199_999
+          bool do
+            must do
+              match_phrase :text do
+                query 'scott morrison'
+                slop 0
+              end
+            end
+            filter do
+              range :timestamp do
+                gte 1_551_358_800_000
+                # lte 1_554_037_199_999
+              end
+            end
           end
         end
         aggregation :first_agg do
