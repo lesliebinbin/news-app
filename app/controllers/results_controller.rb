@@ -2,6 +2,7 @@ class ResultsController < ApplicationController
   def index
     query_words, before_timestamp, after_timestamp, interval = search_params
     search_index = params[:index] || 'news'
+    slop_params = params[:slop] || 0
     search_definition = es_dsl do
       search do
         size 0
@@ -11,7 +12,7 @@ class ResultsController < ApplicationController
             must do
               match_phrase :text do
                 query query_words
-                slop 0
+                slop slop_params
               end
             end
             filter do
