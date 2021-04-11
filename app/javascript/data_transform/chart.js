@@ -15,7 +15,11 @@ export function transform(input_data) {
   ];
   const first_columns = ["timestamp", ...medium_types];
   const rest_columns = buckets_with_timestamp.map(([timestamp, bucket]) => [
-    new Date(timestamp).toLocaleDateString(),
+    new Date(timestamp).toLocaleDateString("fr-CA", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }),
     ...medium_types.map((medium) => bucket[medium]),
   ]);
   return [first_columns, ...rest_columns];

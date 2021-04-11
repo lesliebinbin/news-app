@@ -47,16 +47,20 @@ export function SearchForm() {
         variant="contained"
         color="primary"
         onClick={async () => {
-          const resp = await axios.get("/results", {
-            params: {
-              query: queryRef.current.value,
-              interval: intervalRef.current.value,
-              before: beforeRef.current.value,
-              after: afterRef.current.value,
-            },
-          });
-          const transformed_results = chart_transform(resp.data);
-          setResults(transformed_results);
+          try {
+            const resp = await axios.get("/results", {
+              params: {
+                query: queryRef.current.value,
+                interval: intervalRef.current.value,
+                before: beforeRef.current.value,
+                after: afterRef.current.value,
+              },
+            });
+            const transformed_results = chart_transform(resp.data);
+            setResults(transformed_results);
+          } catch (err) {
+            console.log(err);
+          }
         }}
       >
         Search

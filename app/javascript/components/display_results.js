@@ -12,23 +12,27 @@ import axios from "axios";
 export function DisplayResult() {
   const { results, setResults } = useContext(ResultsContext);
   useEffect(async () => {
-    const resp = await axios.get("/results", {
-      params: {
-        query,
-        interval,
-        before,
-        after,
-      },
-    });
-    const transformed_results = chart_transform(resp.data);
-    setResults(transformed_results);
+    try {
+      const resp = await axios.get("/results", {
+        params: {
+          query,
+          interval,
+          before,
+          after,
+        },
+      });
+      const transformed_results = chart_transform(resp.data);
+      setResults(transformed_results);
+    } catch (err) {
+      console.log(err);
+    }
   }, []);
   return results.length === 0 ? (
     <div>Loading...</div>
   ) : (
     <Chart
-      width={"500px"}
-      height={"360px"}
+      width={"750px"}
+      height={"540px"}
       chartType="ColumnChart"
       loader={<div>Loading Chart</div>}
       data={results}
