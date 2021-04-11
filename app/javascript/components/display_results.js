@@ -1,20 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { ResultsContext } from "../data_context/results_context";
 import { Chart } from "react-google-charts";
 import { transform as chart_transform } from "../data_transform/chart";
+import {
+  query,
+  interval,
+  before,
+  after,
+} from "../default_data/search_params.json";
 import axios from "axios";
 export function DisplayResult() {
-  const [data, setData] = useState([[]]);
+  const { results, setResults } = useContext(ResultsContext);
   useEffect(async () => {
-    const resp = await axios.get("/results");
-    const results = chart_transform(resp.data);
-    setData(results);
+    const resp = await axios.get("/results", {
+      params: {
+        query,
+        interval,
+        before,
+        after,
+      },
+    });
+    const transformed_results = chart_transform(resp.data);
+    setResults(transformed_results);
   }, []);
-  return (
+  return results.length === 0 ? (
+    <div>Loading...</div>
+  ) : (
     <Chart
+      width={"500px"}
+      height={"360px"}
       chartType="ColumnChart"
       loader={<div>Loading Chart</div>}
-      data={data}
+      data={results}
       options={{
+        chartArea: { width: "50%" },
         title: "Example",
         isStacked: true,
         hAxis: {

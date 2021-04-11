@@ -1,5 +1,6 @@
 class ResultsController < ApplicationController
   def index
+    query_words, before_timestamp, after_timestamp, interval = search_params
     search_index = params[:index] || 'news'
     search_definition = es_dsl do
       search do
@@ -9,20 +10,20 @@ class ResultsController < ApplicationController
           bool do
             must do
               match_phrase :text do
-                query 'scott morrison'
+                query query_words
                 slop 0
               end
             end
             filter do
               range :timestamp do
-                gte 1_551_358_800_000
-                # lte 1_554_037_199_999
+                gte after_timestamp
+                lte before_timestamp
               end
             end
           end
         end
         aggregation :first_agg do
-          date_histogram field: 'timestamp', calendar_interval: '1d' do
+          date_histogram field: 'timestamp', calendar_interval: interval do
             aggregation :second_agg do
               terms field: 'medium', show_term_doc_count_error: false
             end
@@ -32,5 +33,11 @@ class ResultsController < ApplicationController
     end
     results = search index: search_index, body: search_definition, pretty: true, filter_path: 'aggregations'
     render json: results
+  end
+
+  private
+
+  def search_params
+    params.require(%i[query before after interval])
   end
 end

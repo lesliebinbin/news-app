@@ -6,7 +6,15 @@ import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import { DisplayResult } from "../components/display_results";
+import { SearchForm } from "../components/search_form";
+import { ResultsProvider } from "../data_context/results_context";
 
 document.addEventListener("DOMContentLoaded", () => {
-  ReactDOM.render(<DisplayResult />, document.getElementById("root"));
+  ReactDOM.render(
+    <ResultsProvider>
+      <DisplayResult />
+      <SearchForm />
+    </ResultsProvider>,
+    document.getElementById("root")
+  );
 });
