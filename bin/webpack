@@ -14,5 +14,10 @@ require "webpacker/webpack_runner"
 
 APP_ROOT = File.expand_path("..", __dir__)
 Dir.chdir(APP_ROOT) do
+  if ENV["NODE_ENV"]  == "development"
+    system("yarn shadow-cljs compile app")
+  else
+    system("yarn shadow-cljs release app")
+  end
   Webpacker::WebpackRunner.run(ARGV)
 end

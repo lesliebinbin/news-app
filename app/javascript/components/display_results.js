@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import { ResultsContext } from "../data_context/results_context";
 import { Chart } from "react-google-charts";
-import { transform as chart_transform } from "../data_transform/chart";
+// import { transform as chart_transform } from "../data_transform/chart";
+import { transform_into_chart } from "general_export";
 import {
   query,
   interval,
@@ -9,6 +10,7 @@ import {
   after,
 } from "../default_data/search_params.json";
 import axios from "axios";
+
 export function DisplayResult() {
   const { results, setResults } = useContext(ResultsContext);
   useEffect(async () => {
@@ -21,7 +23,8 @@ export function DisplayResult() {
           after,
         },
       });
-      const transformed_results = chart_transform(resp.data);
+      // const transformed_results = chart_transform(resp.data);
+      const transformed_results = transform_into_chart(resp.data);
       setResults(transformed_results);
     } catch (err) {
       console.log(err);

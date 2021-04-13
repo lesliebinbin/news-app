@@ -1,0 +1,13 @@
+{:builds
+ {:app {
+         :target :npm-module
+         :entries [general-export]
+         :output-dir "cljs-compiled"
+         :compiler-options {:output-feature-set :es-next}
+        }
+  }
+ :dependencies [[reagent "1.0.0"]
+                [devcards "0.2.6"]]
+ :source-paths ["cljs"
+                "app/javascript"]
+ }
